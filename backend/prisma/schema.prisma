@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model
+model User {
+  id String @id @default(uuid()) @db.Uuid
+
+  email String  @unique
+  name  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profiles           Profile[]
+  OrganizationMember OrganizationMember[]
+}
+
+// Organization model
+model Organization {
+  id String @id @default(uuid()) @db.Uuid
+
+  slug String @unique
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profiles           Profile[]
+  OrganizationMember OrganizationMember[]
+}
+
+// Organization member model
+model OrganizationMember {
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @db.Uuid
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.Uuid
+
+  role OrganizationRole @default(MEMBER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([organizationId, userId])
+}
+
+// Profile model
+model Profile {
+  id String @id @default(uuid()) @db.Uuid
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String? @db.Uuid
+
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?       @db.Uuid
+
+  slug        String   @unique
+  displayName String?
+  image       String?
+  phone       String?
+  phoneCall   Boolean?
+  phoneText   Boolean?
+  bio         String?
+  location    String?
+
+  socialMediaLinks SocialMediaLink[]
+  profileUrls      ProfileUrl[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Profile social media link
+model SocialMediaLink {
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String  @db.Uuid
+
+  url      String
+  platform socialMediaPlatform
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([profileId, url])
+}
+
+// Profile url model
+model ProfileUrl {
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String  @db.Uuid
+
+  url  String
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([profileId, url])
+}
+
+// Social media platform enum
+enum socialMediaPlatform {
+  FACEBOOK
+  X
+  INSTAGRAM
+  LINKEDIN
+  YOUTUBE
+}
+
+// Organization role enum
+enum OrganizationRole {
+  ADMIN
+  MEMBER
+}
