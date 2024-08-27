@@ -54,7 +54,7 @@ model OrganizationMember {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@id([organizationId, userId])
+  @@id(name: "id", [organizationId, userId])
 }
 
 // Profile model
@@ -94,7 +94,7 @@ model SocialMediaLink {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@id([profileId, url])
+  @@id(name: "id", [profileId, url])
 }
 
 // Profile url model
@@ -108,7 +108,7 @@ model ProfileUrl {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@id([profileId, url])
+  @@id(name: "id", [profileId, url])
 }
 
 // Social media platform enum
