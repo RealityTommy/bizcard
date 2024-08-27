@@ -2,11 +2,11 @@ import { PrismaClient } from "@prisma/client";
 import express from "express";
 
 // Import the routers for users, organizations, and profiles
-import { router as userRouter } from "./routes/users";
-import { router as organizationRouter } from "./routes/organizations";
-import { router as profileRouter } from "./routes/profiles";
-import { router as socialMediaRouter } from "./routes/profilesSocialMedia";
-import { router as profileUrlRouter } from "./routes/profileUrls";
+import { router as userRouter } from "./src/routes/user.route";
+import { router as organizationRouter } from "./src/routes/organization.route";
+import { router as profileRouter } from "./src/routes/profile.route";
+import { router as socialMediaRouter } from "./src/routes/profilesSocialMedia.route";
+import { router as profileUrlRouter } from "./src/routes/profileUrl.route";
 
 // Create a new prism client
 const prisma = new PrismaClient();
