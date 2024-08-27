@@ -93,6 +93,7 @@ router.delete("/:id", async (req, res) => {
     success: true,
     message: "Successfully deleted all profiles",
   });
+
   // Delete all of the user's organization memberships
   await prisma.organizationMember.deleteMany({
     where: {
@@ -105,10 +106,47 @@ router.delete("/:id", async (req, res) => {
       id: id,
     },
   });
+  // Send a response to the client
   res.json({
     success: true,
     payload: user,
     message: "Successfully deleted user",
+  });
+});
+
+// Get all profiles of a user
+router.get("/:userId/profiles", async (req, res) => {
+  // Get the userId from the request parameters
+  const { userId } = req.params;
+  // Retrieve all profiles of the user from the database
+  const profiles = await prisma.profile.findMany({
+    where: {
+      userId: userId,
+    },
+  });
+  // Send a response to the client
+  res.json({
+    success: true,
+    payload: profiles,
+    message: "Successfully retrieved profiles",
+  });
+});
+
+// Get all organization memberships of a user
+router.get("/:userId/organizations", async (req, res) => {
+  // Get the userId from the request parameters
+  const { userId } = req.params;
+  // Retrieve all organization memberships of the user from the database
+  const memberships = await prisma.organizationMember.findMany({
+    where: {
+      userId: userId,
+    },
+  });
+  // Send a response to the client
+  res.json({
+    success: true,
+    payload: memberships,
+    message: "Successfully retrieved organization memberships",
   });
 });
 

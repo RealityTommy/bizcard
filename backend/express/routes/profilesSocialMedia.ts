@@ -7,28 +7,12 @@ const prisma = new PrismaClient();
 // Create a new express router
 const router = express.Router();
 
-// Get all social media from a user's profile
-router.get("/:profileId", async (req, res) => {
+// Create a new social media link for a user's profile
+router.post("/:profileId", async (req, res) => {
   // Get the profile id from the request parameters
   const { profileId } = req.params;
-  // Retrieve all social media links from the database for the given profile id
-  const socialMedia = await prisma.socialMediaLink.findMany({
-    where: {
-      profileId: profileId,
-    },
-  });
-  // Send a response to the client
-  res.json({
-    success: true,
-    payload: socialMedia,
-    message: "Successfully retrieved all social media",
-  });
-});
-
-// Create a new social media link for a user's profile
-router.post("/", async (req, res) => {
   // Get the profile id, platform, and link from the request body
-  const { profileId, url, platform } = req.body;
+  const { url, platform } = req.body;
   // Create a new social media link in the database
   const socialMedia = await prisma.socialMediaLink.create({
     data: {

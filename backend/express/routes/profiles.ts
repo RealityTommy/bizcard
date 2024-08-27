@@ -7,16 +7,6 @@ const prisma = new PrismaClient();
 // Create a new express router
 const router = express.Router();
 
-// Get all profiles
-router.get("/", async (req, res) => {
-  const profiles = await prisma.profile.findMany();
-  res.json({
-    success: true,
-    payload: profiles,
-    message: "Retrieved all profiles",
-  });
-});
-
 // Create a new profile
 router.post("/", async (req, res) => {
   const {
@@ -113,6 +103,42 @@ router.delete("/:id", async (req, res) => {
     success: true,
     payload: profile,
     message: "Successfully deleted profile",
+  });
+});
+
+// Get profile social media
+router.get("/:id/socialmedia", async (req, res) => {
+  // Get the id from the request parameters
+  const { id } = req.params;
+  // Get all social media links for the profile
+  const socialMedia = await prisma.socialMediaLink.findMany({
+    where: {
+      profileId: id,
+    },
+  });
+  // Send a response to the client
+  res.json({
+    success: true,
+    payload: socialMedia,
+    message: "Successfully retrieved social media",
+  });
+});
+
+// Get profile urls
+router.get("/:id/urls", async (req, res) => {
+  // Get the id from the request parameters
+  const { id } = req.params;
+  // Get all urls for the profile
+  const urls = await prisma.profileUrl.findMany({
+    where: {
+      profileId: id,
+    },
+  });
+  // Send a response to the client
+  res.json({
+    success: true,
+    payload: urls,
+    message: "Successfully retrieved urls",
   });
 });
 

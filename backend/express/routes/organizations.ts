@@ -103,5 +103,41 @@ router.delete("/:id", async (req, res) => {
   });
 });
 
+// get all members of an organization
+router.get("/:organizationId/members", async (req, res) => {
+  // Get the organizationId from the request parameters
+  const { organizationId } = req.params;
+  // Retrieve all members of the organization from the database
+  const members = await prisma.organizationMember.findMany({
+    where: {
+      organizationId: organizationId,
+    },
+  });
+  // Send a response to the client
+  res.json({
+    success: true,
+    payload: members,
+    message: "Successfully retrieved members",
+  });
+});
+
+// Get all profiles of an organization
+router.get("/:organizationId/profiles", async (req, res) => {
+  // Get the organizationId from the request parameters
+  const { organizationId } = req.params;
+  // Retrieve all profiles of the organization from the database
+  const profiles = await prisma.profile.findMany({
+    where: {
+      organizationId: organizationId,
+    },
+  });
+  // Send a response to the client
+  res.json({
+    success: true,
+    payload: profiles,
+    message: "Successfully retrieved profiles",
+  });
+});
+
 // Export the router
 export { router };
