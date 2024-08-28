@@ -7,6 +7,9 @@ const prisma = new PrismaClient();
 // Create a new express router
 const router = express.Router();
 
+// Use JSON middleware
+router.use(express.json());
+
 // Get all organizations
 router.get("/", async (req, res) => {
   const organizations = await prisma.organization.findMany();

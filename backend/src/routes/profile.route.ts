@@ -7,6 +7,9 @@ const prisma = new PrismaClient();
 // Create a new express router
 const router = express.Router();
 
+// Use JSON middleware
+router.use(express.json());
+
 // Create a new profile
 router.post("/", async (req, res) => {
   const {

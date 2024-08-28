@@ -7,6 +7,9 @@ const prisma = new PrismaClient();
 // Create a new express router
 const router = express.Router();
 
+// Use JSON middleware
+router.use(express.json());
+
 // Get all users
 router.get("/", async (req, res) => {
   // Retrieve all users from the database

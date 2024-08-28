@@ -7,6 +7,9 @@ const prisma = new PrismaClient();
 // Create a new express router
 const router = express.Router();
 
+// Use JSON middleware
+router.use(express.json());
+
 // Create a new social media link for a user's profile
 router.post("/:profileId", async (req, res) => {
   // Get the profile id from the request parameters
@@ -76,6 +79,23 @@ router.delete("/:profileId", async (req, res) => {
     success: true,
     payload: socialMedia,
     message: "Successfully deleted social media link",
+  });
+});
+
+// Delete all social media links for a user's profile
+router.delete("/:profileId/all", async (req, res) => {
+  // Get the profile id from the request parameters
+  const { profileId } = req.params;
+  // Delete all social media links for the profile
+  await prisma.socialMediaLink.deleteMany({
+    where: {
+      profileId: profileId,
+    },
+  });
+  // Send a response to the client
+  res.json({
+    success: true,
+    message: "Successfully deleted all social media links",
   });
 });
 
